@@ -1,6 +1,7 @@
 # ignore the bin folder and all its contents
 bin/
 build/
+.gradle/*
 # ignore every pdf file
 *.pdf
 # rule exception (beginning with a !): pdf files named 'myImportantFile.pdf' should be tracked
