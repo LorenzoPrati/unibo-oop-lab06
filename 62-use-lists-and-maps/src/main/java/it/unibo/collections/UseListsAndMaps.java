@@ -67,12 +67,12 @@ public final class UseListsAndMaps {
         for (int i = 1; i <= ELEMS; i++) {
             arr.add(0, i);
         }
-        System.out.println("Inserting 100.000 elements in an ArrayList : " + getTime(time));
+        System.out.println("Inserting 100.000 elements in the head of an ArrayList : " + getTime(time));
         time = System.nanoTime();
         for (int i = 1; i <= ELEMS; i++) {
-            linked.add(i);
+            linked.add(0, i);
         }
-        System.out.println("Inserting 100.000 elements in a LinkedList : " + getTime(time));
+        System.out.println("Inserting 100.000 elements in the head of a LinkedList : " + getTime(time));
         /*
          * 6) Measure the performance of reading 1000 times an element whose
          * position is in the middle of the collection for both ArrayList and
