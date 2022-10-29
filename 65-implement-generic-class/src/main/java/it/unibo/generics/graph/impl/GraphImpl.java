@@ -55,10 +55,11 @@ public class GraphImpl<N> implements Graph<N> {
     }
 
     public List<N> getPath(final N source, final N target) {
-        if (!isPresent(source) || !isPresent(target)) {
+        if (isPresent(source) && isPresent(target)) {
+            return getPathExec(source, target);
+        } else {
             return Collections.emptyList();
         }
-        return getPathExec(source, target);
     }
 
     public List<N> getPathExec(final N source, final N target) {
