@@ -16,14 +16,42 @@ import it.unibo.generics.graph.api.Graph;
 public class GraphImpl<N> implements Graph<N> {
 
     private final Map<N, Set<N>> edges = new LinkedHashMap<>();
-    private final FrontierStrategy<NodeImpl<N>> strat;
+    private final FrontierStrategy<pathNode<N>> strat;
 
     public GraphImpl() {
         this(BreadthFirst.getInstance());
     }
 
-    public GraphImpl(final FrontierStrategy<NodeImpl<N>> strategy) {
+    public GraphImpl(final FrontierStrategy<pathNode<N>> strategy) {
         this.strat = Objects.requireNonNull(strategy);
+    }
+
+    /*
+     * Utility class implementing a step of the path,
+     * with field value and the reference to the previous node in the
+     * path (father)
+     */
+    static class pathNode<N> {
+
+        private final N value;
+        private pathNode<N> father;
+
+        public pathNode(final N value) {
+            this(value, null);
+        }
+
+        public pathNode(final N value, final pathNode<N> father) {
+            this.value = value;
+            this.father = father;
+        }
+
+        public N getValue() {
+            return this.value;
+        }
+
+        public pathNode<N> getFather() {
+            return this.father;
+        }
     }
 
     public List<N> getPath(final N source, final N target) {
@@ -31,16 +59,16 @@ public class GraphImpl<N> implements Graph<N> {
         /*
          * the frontier act as queue or stack depending on strategy
          */
-        final Deque<NodeImpl<N>> frontier = new LinkedList<>();
-        frontier.add(new NodeImpl<N>(source));
+        final Deque<pathNode<N>> frontier = new LinkedList<>();
+        frontier.add(new pathNode<N>(source));
         while (!frontier.isEmpty() && visited.size() < this.getNodesCount()) {
-            final NodeImpl<N> curr = frontier.removeFirst();
+            final pathNode<N> curr = frontier.removeFirst();
             if (curr.getValue().equals(target)) {
                 return this.getPathFromNode(curr);
             } else {
                 visited.add(curr.getValue());
                 for (final N adj : this.linkedNodes(curr.getValue())) {
-                    NodeImpl<N> adjNode = new NodeImpl<N>(adj, curr);
+                    pathNode<N> adjNode = new pathNode<N>(adj, curr);
                     if (!visited.contains(adjNode)) {
                         strat.addToFrontier(frontier, adjNode);
                     }
@@ -50,7 +78,7 @@ public class GraphImpl<N> implements Graph<N> {
         return Collections.emptyList();
     }
 
-    private List<N> getPathFromNode(NodeImpl<N> node) {
+    private List<N> getPathFromNode(pathNode<N> node) {
         final List<N> path = new LinkedList<>();
         do {
             path.add(0, node.getValue());
