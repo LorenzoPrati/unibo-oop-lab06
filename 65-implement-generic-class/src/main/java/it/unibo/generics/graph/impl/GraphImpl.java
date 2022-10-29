@@ -55,6 +55,13 @@ public class GraphImpl<N> implements Graph<N> {
     }
 
     public List<N> getPath(final N source, final N target) {
+        if (!isPresent(source) || !isPresent(target)) {
+            return Collections.emptyList();
+        }
+        return getPathExec(source, target);
+    }
+
+    public List<N> getPathExec(final N source, final N target) {
         final List<N> visited = new LinkedList<>();
         /*
          * the frontier act as queue or stack depending on strategy
