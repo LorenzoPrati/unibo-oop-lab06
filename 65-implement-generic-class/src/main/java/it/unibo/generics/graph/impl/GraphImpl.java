@@ -99,7 +99,10 @@ public class GraphImpl<N> implements Graph<N> {
     }
 
     private boolean isPresent(final N node) {
-        return this.edges.containsKey(node);
+        if (!this.edges.containsKey(node)) {
+            throw new IllegalArgumentException("Node " + node + " does not exist");
+        }
+        return true;
     }
 
     public void addEdge(final N source, final N target) {
